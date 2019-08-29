@@ -9,7 +9,26 @@
 </head>
 
 <body>
-    <script src=""></script>
+
+    <script>
+        let timer = 100;
+        let kg = udregner(timer);
+        let besked = `Ved ${timer} timers flyrejse har du udledt ${kg} kg CO2.`;
+        if (kg < 100) {
+            console.log(`${besked}  Tæt på Thunberg`);
+        } else if (kg >= 100 && kg < 200) {
+            console.log(`${besked}  Ja ja, du behøver ikke at melde dig ud af!`);
+        } else if (kg >= 200 && kg <= 600) {
+            console.log(`${besked} Det er godt for turismen i nordeuropa.`);
+        } else if (kg > 600) {
+            console.log(`${besked} Nå ja vi kan jo altid kolonisere en anden planet ...`)
+        }
+
+        function udregner(t) {
+            return (t * 109)
+        }
+
+    </script>
 </body>
 
 </html>
