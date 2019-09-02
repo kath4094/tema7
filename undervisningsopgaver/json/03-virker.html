@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Visalle</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        img {
+            width: 100%;
+            height: 450px;
+        }
+
+        section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-gap: 1em;
+            max-width: 1200px;
+            margin: 0 4rem;
+        }
+
+        #liste {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: 1em;
+        }
+
+        article {
+            padding: 0 1rem;
+            background-color: antiquewhite;
+            min-height: 500px;
+        }
+
+        @media screen and (min-width: 600px) {
+            #liste {
+                grid-template-columns: 1fr 1fr;
+                grid-gap: 2em;
+            }
+
+            article {
+                min-height: 500px;
+            }
+        }
+
+        @media screen and (min-width: 1000px) {
+            #liste {
+                grid-template-columns: 1fr 1fr 1fr;
+                grid-gap: 2em;
+            }
+        }
+
+        .valgt {
+            background-color: red;
+
+        }
+
+        nav {
+            text-align: center;
+            padding: 2vw;
+        }
+
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+
+
+<body>
+    <template>
+
+
+        <article>
+            <h2></h2>
+            <img src="" alt="">
+            <p id="github"></p>
+
+        </article>
+    </template>
+
+    <h1>Alle</h1>
+    <nav>
+        <button class="filter" data-køn="alle">Alle</button>
+        <button class="filter" data-køn="m">Mænd</button>
+        <button class="filter valgt" data-køn="k">Kvinder</button>
+        <button class="filter" data-køn="andet">Andet</button>
+
+
+    </nav>
+    <section id="liste"></section>
+
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", getJson);
+        const dest = document.querySelector("#liste");
+        const temp = document.querySelector("template");
+        let personer = "";
+        let filter = "alle";
+
+
+        async function getJson() {
+            let jsonData = await fetch("https://spreadsheets.google.com/feeds/list/1Xge7slZ9dEOTCn1Yxl3OE4xgvrXOL8Y_iu3WN1yGB1U/od6/public/values?alt=json");
+            personer = await jsonData.json();
+            visPersoner();
+            addEventListenersToButtons();
+        }
+
+
+        function visPersoner() {
+            dest.innerHTML = "";
+            personer.feed.entry.forEach(person => {
+                if (filter == "alle" || filter == person.gsx$køn.$t) {
+                    const klon = temp.cloneNode(true).content;
+                    klon.querySelector("h2").textContent = person.gsx$navn.$t;
+                    klon.querySelector("img").src = person.gsx$billede.$t;
+                    klon.querySelector("#github").textContent = person.gsx$github.$t;
+                    dest.appendChild(klon);
+
+                }
+            })
+
+        }
+
+        function addEventListenersToButtons() {
+            console.log("buttons");
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.addEventListener("click", filtrering);
+            })
+        }
+
+        function filtrering() {
+            filter = this.dataset.køn;
+            document.querySelector("h1").textContent = this.textContent;
+            visPersoner();
+        }
+
+        /*function kvinder() {
+            const dest = document.querySelector("#liste");
+            const temp = document.querySelector("template");
+            personer.feed.entry.forEach((person) => {
+                if (person.gsx$køn.$t == filter) {
+                    const klon = temp.cloneNode(true).content;
+                    klon.querySelector("h2").textContent = person.gsx$navn.$t;
+                    klon.querySelector("img").src = person.gsx$billede.$t;
+                    klon.querySelector("#github").textContent = person.gsx$github.$t;
+                    dest.appendChild(klon);
+                }
+            })
+        }*/
+    </script>
+</body></html>
