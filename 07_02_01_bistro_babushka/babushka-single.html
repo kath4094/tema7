@@ -131,6 +131,12 @@
 
 
 
+        function addEventListenersToButtons() {
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.addEventListener("click", filtrering);
+            })
+        }
+
 
         function filtrering() {
             filter = this.dataset.kategori;
