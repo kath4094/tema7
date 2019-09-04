@@ -7,12 +7,17 @@
     <title>Bistro Babushka</title>
 
     <style>
+        body {
+            background-color: antiquewhite;
+        }
+
         section {
             display: grid;
             grid-template-columns: 1fr;
             grid-gap: 1em;
             max-width: 1200px;
             margin: 0 4rem;
+            margin-top: 4rem;
 
         }
 
@@ -20,13 +25,59 @@
             width: 100%;
         }
 
+        /*        style kopi til andre start*/
+
         h1 {
             margin-left: 4rem;
+            font-family: sans-serif;
         }
 
-        nav {
-            margin-left: 4rem;
+        h2 {
+            font-family: sans-serif;
         }
+
+        p {
+            font-family: sans-serif;
+
+        }
+
+        article:hover {
+            background-color: white;
+            padding: 1rem;
+        }
+
+        #popup article:hover {
+            background-color: white;
+            padding: 0rem;
+        }
+
+
+        button {
+            background-color: rgba(255, 166, 4, 0.61);
+            border-radius: 0.3em;
+            padding: 10px 15px;
+            margin-left: 1rem;
+            border-style: none;
+
+
+        }
+
+        .valgt {
+            background-color: white;
+            border-radius: 0.3em;
+
+        }
+
+
+
+        nav {
+
+            text-align: center;
+            margin-top: 2rem;
+
+        }
+
+        /*        style kopi til andre slut*/
 
         #popup {
             position: fixed;
@@ -35,7 +86,9 @@
             height: 100vh;
             background: rgba(0, 0, 0, .7);
             display: none;
+
         }
+
 
         .indhold {
             width: 70vw;
@@ -43,6 +96,7 @@
             background: #fff;
             margin: 4rem auto;
             padding: 10px;
+
         }
 
         .luk {
@@ -60,6 +114,11 @@
             #menu_list {
                 grid-template-columns: 1fr 1fr 1fr;
                 grid-gap: 3em;
+            }
+
+            button {
+                font-size: 16px;
+
             }
         }
 
@@ -79,6 +138,14 @@
 
             .indhold {
                 margin: 0.4rem auto;
+            }
+
+            section {
+                margin: 0 auto;
+            }
+
+            h1 {
+                margin: 4rem:
             }
         }
     </style>
