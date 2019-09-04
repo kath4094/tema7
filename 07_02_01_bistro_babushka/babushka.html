@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bistro Babushka</title>
+
+    <style>
+        section {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: 1em;
+            max-width: 1200px;
+            margin: 0 4rem;
+
+        }
+
+        img {
+            width: 100%;
+        }
+
+        h1 {
+            margin-left: 4rem;
+        }
+
+        nav {
+            margin-left: 4rem;
+        }
+
+        #popup {
+            position: fixed;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, .7);
+            display: none;
+        }
+
+        .indhold {
+            width: 70vw;
+            min-height: 50vh;
+            background: #fff;
+            margin: 4rem auto;
+            padding: 10px;
+        }
+
+        .luk {
+            position: fixed;
+            right: 0;
+            font-size: 2rem;
+        }
+
+        .popup_billede {
+            max-height: 71vh;
+
+        }
+
+        @media screen and (min-width: 600px) {
+            #menu_list {
+                grid-template-columns: 1fr 1fr 1fr;
+                grid-gap: 3em;
+            }
+        }
+
+        @media screen and (min-width: 1000px) {
+            #menu_list {
+                grid-template-columns: 1fr 1fr 1fr;
+
+            }
+        }
+
+        @media screen and (min-width: 1100px) {
+            #menu_list {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+
+
+            }
+
+            .indhold {
+                margin: 0.4rem auto;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <template>
+        <article class="data_ret">
+
+            <img class="temp_billede" src="" alt="">
+
+
+            <h2 class="temp_navn"></h2>
+            <p class="temp_info"></p>
+            <p class="temp_pris"></p>
+
+
+        </article>
+
+    </template>
+
+    <div id="popup">
+        <button class="luk">X</button>
+        <section class="indhold">
+            <article class="enkeltRet">
+                <h2 class="popup_h2"></h2>
+                <img class="popup_billede" src="" alt="">
+                <p class="popup_info"></p>
+                <p class="popup_pris"></p>
+            </article>
+        </section>
+    </div>
+
+    <nav class="menu_nav">
+        <button class="filter valgt" data-kategori="alle">Alle</button>
+        <button class="filter" data-kategori="forretter">Forretter</button>
+        <button class="filter" data-kategori="hovedretter">Hovedretter</button>
+        <button class="filter" data-kategori="desserter">Desserter</button>
+
+    </nav>
+
+    <h1>Menu</h1>
+
+    <section id="menu_list">
+
+
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", getJson);
+
+        const dest = document.querySelector("#menu_list");
+        const temp = document.querySelector("template");
+        let retter = "";
+        let filter = "alle";
+
+        async function getJson() {
+            let jsonData = await
+            fetch("https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json");
+
+            retter = await jsonData.json();
+            visRetter();
+
+            addEventListenersToButtons();
+
+
+
+        }
+
+        function visRetter() {
+            dest.innerHTML = "";
+            retter.feed.entry.forEach(ret => {
+                if (filter == "alle" || filter == ret.gsx$kategori.$t) {
+                    const klon = temp.cloneNode(true).content;
+                    klon.querySelector("h2").textContent = ret.gsx$navn.$t;
+                    klon.querySelector(".temp_billede").src = "imgs/small/" + ret.gsx$billede.$t + "-sm.jpg";
+                    klon.querySelector(".temp_info").textContent = ret.gsx$kort.$t;
+                    klon.querySelector(".temp_pris").textContent = ret.gsx$pris.$t + " kr ";
+                    dest.appendChild(klon);
+                    dest.lastElementChild.addEventListener("click", () => {
+                        visRet(ret)
+                    });
+                }
+            })
+
+        }
+
+        function visRet(ret) {
+            document.querySelector("#popup").style.display = "block";
+            document.querySelector("#popup .luk").addEventListener("click", lukRet);
+
+            document.querySelector(".popup_h2").textContent = ret.gsx$navn.$t;
+            document.querySelector(".popup_billede").src = "imgs/large/" + ret.gsx$billede.$t + ".jpg";
+            document.querySelector(".popup_info").textContent = ret.gsx$lang.$t;
+            document.querySelector(".popup_pris").textContent = ret.gsx$pris.$t + " kr ";
+
+        }
+
+        function lukRet() {
+            document.querySelector("#popup").style.display = "none";
+        }
+
+        function addEventListenersToButtons() {
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.addEventListener("click", filtrering);
+            })
+        }
+
+
+        function filtrering() {
+            filter = this.dataset.kategori;
+
+
+            document.querySelector("h1").textContent = this.textContent;
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.classList.remove("valgt");
+            });
+            this.classList.add("valgt");
+            visRetter();
+        }
+    </script>
+</body></html>

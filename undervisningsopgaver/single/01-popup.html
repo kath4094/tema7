@@ -62,6 +62,31 @@
         h1 {
             text-align: center;
         }
+
+        #popup {
+            position: fixed;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, .7);
+            display: none;
+        }
+
+        .indhold {
+            width: 70vw;
+            min-height: 50vh;
+            background: #fff;
+            margin: 4rem auto;
+            padding: 10px;
+
+        }
+
+        .luk {
+            position: fixed;
+            right: 0;
+            font-size: 2rem;
+        }
+
     </style>
 </head>
 
@@ -78,6 +103,16 @@
 
         </article>
     </template>
+    <div id="popup">
+        <button class="luk">X</button>
+        <section class="indhold">
+            <article class="enkeltPerson">
+                <h2></h2>
+                <img class="billede" src="" alt="">
+                <p class="githubpopup">Github:</p>
+            </article>
+        </section>
+    </div>
 
     <h1>Alle</h1>
     <nav>
@@ -89,6 +124,8 @@
 
     </nav>
     <section id="liste"></section>
+
+
 
 
 
@@ -118,10 +155,29 @@
                     klon.querySelector("img").src = person.gsx$billede.$t;
                     klon.querySelector("#github").textContent = person.gsx$github.$t;
                     dest.appendChild(klon);
+                    dest.lastElementChild.addEventListener("click", () => {
+                        visSingle(person)
+                    });
 
                 }
             })
 
+        }
+
+        function visSingle(person) {
+            document.querySelector("#popup").style.display = "block";
+            document.querySelector("#popup .luk").addEventListener("click", lukSingle);
+
+
+            document.querySelector(".enkeltPerson h2").textContent = person.gsx$billede.$t;
+            document.querySelector(".enkeltPerson .billede").src = person.gsx$billede.$t;
+            document.querySelector(".enkeltPerson .billede").alt = person.gsx$billede.$t;
+            document.querySelector(".githubpopup").textContent = person.gsx$billede.$t;
+
+        }
+
+        function lukSingle() {
+            document.querySelector("#popup").style.display = "none";
         }
 
         function addEventListenersToButtons() {
@@ -157,5 +213,8 @@
                 }
             })
         }*/
+
     </script>
-</body></html>
+</body>
+
+</html>
